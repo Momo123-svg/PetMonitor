@@ -39,7 +39,27 @@ socket.on("viewer-joined", async () => {
     pc = new RTCPeerConnection({
         iceServers: [
             {
-                urls: "stun:stun.l.google.com:19302"
+                urls: "stun:stun.relay.metered.ca:80"
+            },
+            {
+                urls: "turn:global.relay.metered.ca:80",
+                username: "14b4fa84570f8d23af9a4730",
+                credential: "wWirEOQ7su3vcJ2p"
+            },
+            {
+                urls: "turn:global.relay.metered.ca:80?transport=tcp",
+                username: "14b4fa84570f8d23af9a4730",
+                credential: "wWirEOQ7su3vcJ2p"
+            },
+            {
+                urls: "turn:global.relay.metered.ca:443",
+                username: "14b4fa84570f8d23af9a4730",
+                credential: "wWirEOQ7su3vcJ2p"
+            },
+            {
+                urls: "turns:global.relay.metered.ca:443?transport=tcp",
+                username: "14b4fa84570f8d23af9a4730",
+                credential: "wWirEOQ7su3vcJ2p"
             }
         ]
     });
