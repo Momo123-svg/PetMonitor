@@ -4,6 +4,9 @@ let pc;
 let stream;
 let room;
 
+const remoteAudio = document.createElement("audio");
+remoteAudio.autoplay = true;
+
 document.getElementById("start").onclick = async () => {
 
     document.getElementById("start").disabled = true;
@@ -17,7 +20,11 @@ document.getElementById("start").onclick = async () => {
 
     stream = await navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: true
+        audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+        }
     });
 
     document.getElementById("localVideo").srcObject = stream;
@@ -41,8 +48,17 @@ socket.on("viewer-joined", async () => {
         pc.addTrack(track, stream);
     });
 
+    pc.ontrack = (event) => {
+
+        if (event.track.kind === "audio") {
+            remoteAudio.srcObject = event.streams[0];
+        }
+    };
+
     pc.onicecandidate = (event) => {
+
         if (event.candidate) {
+
             socket.emit("ice-candidate", {
                 room,
                 candidate: event.candidate
@@ -51,7 +67,12 @@ socket.on("viewer-joined", async () => {
     };
 
     socket.on("answer", async (answer) => {
-        await pc.setRemoteDescription(answer);
+
+        try {
+            await pc.setRemoteDescription(answer);
+        } catch (err) {
+            console.error(err);
+        }
     });
 
     const offer = await pc.createOffer();
@@ -70,7 +91,8 @@ socket.on("ice-candidate", async (candidate) => {
 
     try {
         await pc.addIceCandidate(candidate);
-    } catch (err) {
+    }
+    catch (err) {
         console.error(err);
     }
 });
