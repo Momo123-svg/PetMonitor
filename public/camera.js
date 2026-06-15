@@ -6,6 +6,8 @@ let room;
 
 const remoteAudio = document.createElement("audio");
 remoteAudio.autoplay = true;
+remoteAudio.controls = true;
+document.body.appendChild(remoteAudio);
 
 document.getElementById("start").onclick = async () => {
 
@@ -34,8 +36,6 @@ document.getElementById("start").onclick = async () => {
 
 socket.on("viewer-joined", async () => {
 
-    console.log("Viewer joined");
-
     pc = new RTCPeerConnection({
         iceServers: [
             {
@@ -50,8 +50,19 @@ socket.on("viewer-joined", async () => {
 
     pc.ontrack = (event) => {
 
+        console.log("Track received:", event.track.kind);
+
         if (event.track.kind === "audio") {
+
             remoteAudio.srcObject = event.streams[0];
+
+            remoteAudio.play()
+                .then(() => {
+                    console.log("Audio playing");
+                })
+                .catch(err => {
+                    console.error("Audio play failed", err);
+                });
         }
     };
 
@@ -70,7 +81,8 @@ socket.on("viewer-joined", async () => {
 
         try {
             await pc.setRemoteDescription(answer);
-        } catch (err) {
+        }
+        catch (err) {
             console.error(err);
         }
     });
