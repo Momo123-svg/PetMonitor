@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pet Viewer</title>
+</head>
+<body>
+
+<h2>Pet Viewer</h2>
+
+<input id="room" placeholder="Room ID">
+
+<button id="join">
+    Join
+</button>
+
+<br><br>
+
+<video
+    id="remoteVideo"
+    autoplay
+    playsinline
+    width="600">
+</video>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="viewer.js"></script>
+
+</body>
+</html>

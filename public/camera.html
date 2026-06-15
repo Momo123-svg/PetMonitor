@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pet Camera</title>
+</head>
+<body>
+
+<h2>Pet Camera</h2>
+
+<input id="room" placeholder="Room ID">
+
+<button id="start">
+    Start Camera
+</button>
+
+<br><br>
+
+<video
+    id="localVideo"
+    autoplay
+    muted
+    playsinline
+    width="600">
+</video>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="camera.js"></script>
+
+</body>
+</html>
